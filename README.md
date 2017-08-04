@@ -1,5 +1,7 @@
 # go-updater
 
+[![Build Status](https://travis-ci.org/swhite24/go-updater.svg?branch=master)](https://travis-ci.org/swhite24/go-updater)
+
 Provides a simple mechanism to conditionally update a struct's values from a map.
 
 ## Installation
