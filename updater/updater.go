@@ -61,9 +61,37 @@ func Struct(model interface{}, update map[string]interface{}) {
 					fv.Set(reflect.ValueOf(u))
 				} else if u, ok := update[key].([]int); ok {
 					fv.Set(reflect.ValueOf(u))
+				} else if u, ok := update[key].([]interface{}); ok {
+					handleSliceInterface(fv, u)
 				}
 			}
 		}
+	}
+}
+
+func handleSliceInterface(fv reflect.Value, s []interface{}) {
+	if len(s) == 0 {
+		return
+	}
+
+	first := s[0]
+	switch first.(type) {
+	case string:
+		update := []string{}
+		for _, v := range s {
+			if u, ok := v.(string); ok {
+				update = append(update, u)
+			}
+		}
+		fv.Set(reflect.ValueOf(update))
+	case int:
+		update := []int{}
+		for _, v := range s {
+			if u, ok := v.(int); ok {
+				update = append(update, u)
+			}
+		}
+		fv.Set(reflect.ValueOf(update))
 	}
 }
 

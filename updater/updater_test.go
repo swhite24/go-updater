@@ -1,9 +1,6 @@
 package updater
 
-import (
-	"fmt"
-	"testing"
-)
+import "testing"
 
 type foo struct {
 	String      string   `json:"string" update:"true"`
@@ -12,6 +9,7 @@ type foo struct {
 	Bool        bool     `json:"bool" update:"true"`
 	StringSlice []string `json:"string_slice" update:"true"`
 	IntSlice    []int    `json:"int_slice" update:"true"`
+	IPWhitelist []string `json:"ip_whitelist" update:"true"`
 }
 
 func TestUpdateSlice(t *testing.T) {
@@ -19,6 +17,7 @@ func TestUpdateSlice(t *testing.T) {
 	u := map[string]interface{}{
 		"string_slice": []string{"foo", "bar"},
 		"int_slice":    []int{1, 2, 3},
+		"ip_whitelist": []interface{}{"0.0.0.0", "10.10.0.0"},
 	}
 
 	Struct(f, u)
@@ -29,6 +28,9 @@ func TestUpdateSlice(t *testing.T) {
 	if len(f.IntSlice) != 3 {
 		t.Errorf("failed to update int slice: want %d, got %d", 3, len(f.IntSlice))
 	}
+	if len(f.IPWhitelist) != 2 {
+		t.Errorf("failed to update slice interface: want %d, got %d", 2, len(f.IPWhitelist))
+	}
 }
 
 func TestUpdateString(t *testing.T) {
@@ -38,7 +40,6 @@ func TestUpdateString(t *testing.T) {
 	}
 
 	Struct(f, u)
-	fmt.Println(f)
 
 	if f.String != "foo1" {
 		t.Errorf("failed to update string: want %s, got %s", "foo1", f.String)
