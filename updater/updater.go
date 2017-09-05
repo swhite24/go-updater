@@ -22,9 +22,9 @@ func Struct(model interface{}, update map[string]interface{}) {
 	for i := 0; i < v.NumField(); i++ {
 		f := t.Field(i)
 		fv := v.Field(i)
+		key := getKeyName(f)
 
-		if f.Tag.Get("update") != "" {
-			key := getKeyName(f)
+		if f.Tag.Get("update") != "" && update[key] != nil {
 			switch f.Type.Kind() {
 			case reflect.String:
 				if u, ok := update[key].(string); ok {
@@ -63,6 +63,10 @@ func Struct(model interface{}, update map[string]interface{}) {
 					fv.Set(reflect.ValueOf(u))
 				} else if u, ok := update[key].([]interface{}); ok {
 					handleSliceInterface(fv, u)
+				}
+			case reflect.Ptr, reflect.Struct:
+				if u, ok := update[key].(map[string]interface{}); ok {
+					Struct(fv.Interface(), u)
 				}
 			}
 		}
