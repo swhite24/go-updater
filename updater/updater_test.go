@@ -16,7 +16,7 @@ func TestUpdateSlice(t *testing.T) {
 	f := &foo{StringSlice: []string{"foo"}}
 	u := map[string]interface{}{
 		"string_slice": []string{"foo", "bar"},
-		"int_slice":    []int{1, 2, 3},
+		"int_slice":    []interface{}{1, 2, 3},
 		"ip_whitelist": []interface{}{"0.0.0.0", "10.10.0.0"},
 	}
 

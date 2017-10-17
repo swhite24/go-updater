@@ -89,6 +89,8 @@ func handleSliceInterface(fv reflect.Value, s []interface{}) {
 		for _, v := range s {
 			if u, ok := v.(int); ok {
 				update = append(update, u)
+			} else if u, ok := v.(float64); ok {
+				update = append(update, int(u))
 			}
 		}
 		fv.Set(reflect.ValueOf(update))
